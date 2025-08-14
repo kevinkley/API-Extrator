@@ -1,14 +1,344 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <meta charset="utf-8">
-    <title>Extrator de Contas Médicas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedExtract - Extrator de Contas Médicas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo-section {
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+        }
+
+        .logo-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .brand-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 1rem;
+            color: #718096;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+        }
+
+        .upload-section {
+            margin-bottom: 2rem;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            display: block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .file-label:active {
+            transform: translateY(0);
+        }
+
+        .file-label i {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .file-info {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(79, 172, 254, 0.1);
+            border-radius: 12px;
+            color: #4facfe;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+        }
+
+        .file-info.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .extract-button {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .extract-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(72, 187, 120, 0.4);
+        }
+
+        .extract-button:active {
+            transform: translateY(0);
+        }
+
+        .extract-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .info-section {
+            background: rgba(79, 172, 254, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(79, 172, 254, 0.1);
+        }
+
+        .info-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-title i {
+            margin-right: 0.5rem;
+            color: #4facfe;
+        }
+
+        .info-text {
+            font-size: 0.9rem;
+            color: #718096;
+            line-height: 1.5;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+
+        .features-list li i {
+            color: #48bb78;
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .brand-title {
+                font-size: 1.75rem;
+            }
+
+            .logo-icon {
+                width: 70px;
+                height: 70px;
+            }
+
+            .logo-icon i {
+                font-size: 1.75rem;
+            }
+        }
+
+        .loading {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(79, 172, 254, 0.3);
+            border-top: 3px solid #4facfe;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-    <h2>Enviar PDF para extração</h2>
-    <form action="/" method="post" enctype="multipart/form-data">
-        <input type="file" name="pdf_file" accept=".pdf" required>
-        <button type="submit">Extrair e Baixar Excel</button>
-    </form>
+    <div class="main-container">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <i class="fas fa-file-medical"></i>
+            </div>
+            <h1 class="brand-title">MedExtract</h1>
+            <p class="brand-subtitle">Extrator Inteligente de Contas Médicas</p>
+        </div>
+
+        <form action="/" method="post" enctype="multipart/form-data" id="extractForm">
+            <div class="upload-section">
+                <div class="file-input-wrapper">
+                    <input type="file" id="pdf_file" name="pdf_file" accept=".pdf" required class="file-input">
+                    <label for="pdf_file" class="file-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        Selecionar Arquivo PDF
+                    </label>
+                    <div class="file-info" id="fileInfo">
+                        <i class="fas fa-file-pdf"></i>
+                        <span id="fileName">Nenhum arquivo selecionado</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="extract-button" id="extractBtn">
+                    <i class="fas fa-magic"></i>
+                    Extrair e Gerar Excel
+                </button>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 0.5rem; color: #4facfe; font-size: 0.9rem;">Processando arquivo...</p>
+                </div>
+            </div>
+        </form>
+
+        <div class="info-section">
+            <div class="info-title">
+                <i class="fas fa-info-circle"></i>
+                Como Funciona
+            </div>
+            <p class="info-text">
+                Faça upload do seu PDF de contas médicas e receba automaticamente um arquivo Excel organizado e pronto para análise.
+            </p>
+            <ul class="features-list">
+                <li><i class="fas fa-check"></i> Extração automática de dados</li>
+                <li><i class="fas fa-check"></i> Formato Excel compatível</li>
+                <li><i class="fas fa-check"></i> Processamento seguro</li>
+                <li><i class="fas fa-check"></i> Download instantâneo</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('pdf_file');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const extractBtn = document.getElementById('extractBtn');
+        const loading = document.getElementById('loading');
+        const form = document.getElementById('extractForm');
+
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                fileName.textContent = file.name;
+                fileInfo.classList.add('show');
+                extractBtn.disabled = false;
+            } else {
+                fileInfo.classList.remove('show');
+                extractBtn.disabled = true;
+            }
+        });
+
+        form.addEventListener('submit', function(e) {
+            if (fileInput.files.length > 0) {
+                extractBtn.style.display = 'none';
+                loading.classList.add('show');
+            }
+        });
+
+        // Inicializar botão como desabilitado
+        extractBtn.disabled = true;
+    </script>
 </body>
 </html>
